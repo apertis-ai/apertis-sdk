@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const openAIChatResponseSchema = z.object({
-  id: z.string(),
+  id: z.string().optional(),
   object: z.literal("chat.completion").optional(),
   created: z.number().optional(),
   model: z.string().optional(),
@@ -40,7 +40,7 @@ export const openAIChatResponseSchema = z.object({
 export type OpenAIChatResponse = z.infer<typeof openAIChatResponseSchema>;
 
 export const openAIChatChunkSchema = z.object({
-  id: z.string(),
+  id: z.string().optional(),
   object: z.literal("chat.completion.chunk").optional(),
   created: z.number().optional(),
   model: z.string().optional(),

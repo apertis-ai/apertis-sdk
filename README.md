@@ -79,20 +79,6 @@ const { text } = await generateText({
 });
 ```
 
-### Text Completions
-
-For models that support the legacy completion API:
-
-```typescript
-import { apertis } from '@apertis/ai-sdk-provider';
-import { generateText } from 'ai';
-
-const { text } = await generateText({
-  model: apertis.completion('gpt-3.5-turbo-instruct'),
-  prompt: 'Complete this: The quick brown fox',
-});
-```
-
 ### Embeddings
 
 Generate vector embeddings for semantic search and similarity:
@@ -126,10 +112,6 @@ Any model available on Apertis AI, including:
 - `gemini-3-pro-preview`, `gemini-3-flash-preview`, `gemini-2.5-flash-preview`
 - And 470+ more models
 
-### Completion Models
-- `gpt-3.5-turbo-instruct`
-- `davinci-002`, `babbage-002`
-
 ### Embedding Models
 - `text-embedding-3-small`, `text-embedding-3-large`
 - `text-embedding-ada-002`
@@ -146,11 +128,11 @@ const apertis = createApertis({
 });
 ```
 
-## What's New (v1.1.0)
+## What's New (v1.1.1)
 
 - **ProviderV3 Interface** - Full implementation of `ProviderV3` specification
-- **Completion Models** - Support for text completion via `apertis.completion()`
 - **Embedding Models** - Support for embeddings via `apertis.textEmbeddingModel()`
+- **Schema Fixes** - More flexible response parsing for Apertis API compatibility
 
 ## Breaking Changes (v1.0.0)
 

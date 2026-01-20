@@ -10,11 +10,6 @@ import type {
   ApertisModelId,
   ApertisProviderSettings,
 } from "./apertis-chat-settings";
-import { ApertisCompletionLanguageModel } from "./apertis-completion-language-model";
-import type {
-  ApertisCompletionModelId,
-  ApertisCompletionSettings,
-} from "./apertis-completion-settings";
 import { ApertisEmbeddingModel } from "./apertis-embedding-model";
 import type {
   ApertisEmbeddingModelId,
@@ -41,14 +36,6 @@ export interface ApertisProvider extends ProviderV3 {
    * Required by ProviderV3 interface.
    */
   languageModel(modelId: string): LanguageModelV3;
-
-  /**
-   * Creates a completion model for text completions.
-   */
-  completion(
-    modelId: ApertisCompletionModelId,
-    settings?: ApertisCompletionSettings,
-  ): LanguageModelV3;
 
   /**
    * Creates an embedding model.
@@ -98,17 +85,6 @@ export function createApertis(
       fetch: options.fetch,
     });
 
-  const createCompletionModel = (
-    modelId: ApertisCompletionModelId,
-    settings: ApertisCompletionSettings = {},
-  ): LanguageModelV3 =>
-    new ApertisCompletionLanguageModel(modelId, settings, {
-      provider: "apertis.completion",
-      baseURL,
-      headers: getHeaders,
-      fetch: options.fetch,
-    });
-
   const createEmbeddingModel = (
     modelId: ApertisEmbeddingModelId,
     settings: ApertisEmbeddingSettings = {},
@@ -127,7 +103,6 @@ export function createApertis(
       specificationVersion: "v3" as const,
       chat: createChatModel,
       languageModel: (modelId: string) => createChatModel(modelId),
-      completion: createCompletionModel,
       embeddingModel: (modelId: string) => createEmbeddingModel(modelId),
       textEmbeddingModel: createEmbeddingModel,
       imageModel: (): never => {

@@ -12,7 +12,6 @@ describe("createApertis", () => {
     expect(typeof provider).toBe("function");
     expect(typeof provider.chat).toBe("function");
     expect(typeof provider.languageModel).toBe("function");
-    expect(typeof provider.completion).toBe("function");
     expect(typeof provider.embeddingModel).toBe("function");
     expect(typeof provider.textEmbeddingModel).toBe("function");
     expect(typeof provider.imageModel).toBe("function");
@@ -62,15 +61,6 @@ describe("createApertis", () => {
     const urls = model.supportedUrls as Record<string, RegExp[]>;
     expect(urls["image/*"]).toBeDefined();
     expect(urls["image/*"][0]).toBeInstanceOf(RegExp);
-  });
-
-  it("creates a completion model via completion method", () => {
-    const provider = createApertis({ apiKey: "test-key" });
-    const model = provider.completion("gpt-3.5-turbo-instruct");
-
-    expect(model.provider).toBe("apertis.completion");
-    expect(model.modelId).toBe("gpt-3.5-turbo-instruct");
-    expect(model.specificationVersion).toBe("v3");
   });
 
   it("creates an embedding model via embeddingModel method", () => {

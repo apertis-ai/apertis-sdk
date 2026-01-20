@@ -1,6 +1,6 @@
 {
   "name": "@apertis/ai-sdk-provider",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Apertis AI provider for Vercel AI SDK",
   "license": "Apache-2.0",
   "repository": {

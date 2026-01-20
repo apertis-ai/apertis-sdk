@@ -1,15 +1,15 @@
 import { z } from "zod";
 
 export const openAIEmbeddingResponseSchema = z.object({
-  object: z.literal("list"),
+  object: z.literal("list").optional(),
   data: z.array(
     z.object({
-      object: z.literal("embedding"),
+      object: z.literal("embedding").optional(),
       embedding: z.array(z.number()),
       index: z.number(),
     }),
   ),
-  model: z.string(),
+  model: z.string().optional(),
   usage: z
     .object({
       prompt_tokens: z.number(),

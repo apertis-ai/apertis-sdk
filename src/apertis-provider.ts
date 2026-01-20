@@ -1,4 +1,4 @@
-import type { LanguageModelV1 } from "@ai-sdk/provider";
+import type { LanguageModelV3 } from "@ai-sdk/provider";
 import { loadApiKey, withoutTrailingSlash } from "@ai-sdk/provider-utils";
 import { ApertisChatLanguageModel } from "./apertis-chat-language-model";
 import type {
@@ -11,7 +11,7 @@ export interface ApertisProvider {
   /**
    * Creates a chat model for text generation.
    */
-  (modelId: ApertisModelId, settings?: ApertisChatSettings): LanguageModelV1;
+  (modelId: ApertisModelId, settings?: ApertisChatSettings): LanguageModelV3;
 
   /**
    * Creates a chat model for text generation.
@@ -19,7 +19,7 @@ export interface ApertisProvider {
   chat(
     modelId: ApertisModelId,
     settings?: ApertisChatSettings,
-  ): LanguageModelV1;
+  ): LanguageModelV3;
 
   /**
    * Creates a chat model for text generation (alias for languageModel).
@@ -27,7 +27,7 @@ export interface ApertisProvider {
   languageModel(
     modelId: ApertisModelId,
     settings?: ApertisChatSettings,
-  ): LanguageModelV1;
+  ): LanguageModelV3;
 }
 
 export function createApertis(
@@ -49,7 +49,7 @@ export function createApertis(
   const createChatModel = (
     modelId: ApertisModelId,
     settings: ApertisChatSettings = {},
-  ): LanguageModelV1 =>
+  ): LanguageModelV3 =>
     new ApertisChatLanguageModel(modelId, settings, {
       provider: "apertis.chat",
       baseURL,

@@ -52,8 +52,11 @@ describe("createApertis", () => {
     const provider = createApertis({ apiKey: "test-key" });
     const model = provider("gpt-5.2");
 
-    expect(model.specificationVersion).toBe("v1");
-    expect(model.defaultObjectGenerationMode).toBe("json");
-    expect(model.supportsImageUrls).toBe(true);
+    expect(model.specificationVersion).toBe("v3");
+    expect(model.supportedUrls).toBeDefined();
+    // supportedUrls is a Record with image/* key for HTTP(S) image URLs
+    const urls = model.supportedUrls as Record<string, RegExp[]>;
+    expect(urls["image/*"]).toBeDefined();
+    expect(urls["image/*"][0]).toBeInstanceOf(RegExp);
   });
 });

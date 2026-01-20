@@ -2,10 +2,15 @@
 
 Apertis AI provider for the [Vercel AI SDK](https://sdk.vercel.ai/).
 
+## Compatibility
+
+- **Requires AI SDK 6.0+** - This package implements the `LanguageModelV3` specification
+- **Node.js 18+** - Minimum supported Node.js version
+
 ## Installation
 
 ```bash
-npm install @apertis/ai-sdk-provider
+npm install @apertis/ai-sdk-provider ai
 ```
 
 ## Setup
@@ -82,6 +87,26 @@ Any model available on Apertis AI, including:
 - `claude-opus-4-5-20251101`, `claude-sonnet-4.5`, `claude-haiku-4.5`
 - `gemini-3-pro-preview`, `gemini-3-flash-preview`, `gemini-2.5-flash-preview`
 - And 470+ more models
+
+## Provider Configuration
+
+```typescript
+import { createApertis } from '@apertis/ai-sdk-provider';
+
+const apertis = createApertis({
+  apiKey: 'sk-your-api-key',     // Optional if APERTIS_API_KEY is set
+  baseURL: 'https://api.apertis.ai/v1',  // Custom API endpoint
+  headers: { 'X-Custom': 'value' },      // Custom headers
+});
+```
+
+## Breaking Changes (v1.0.0)
+
+- **Requires AI SDK 6+** - No longer compatible with AI SDK 5.x
+- **V3 Specification** - Implements `LanguageModelV3` interface
+- **Content format** - Output uses `content` array instead of separate `text`/`toolCalls`
+- **Usage format** - Token tracking uses new `inputTokens`/`outputTokens` structure
+- **Supported URLs** - New `supportedUrls` property for image URL support
 
 ## License
 

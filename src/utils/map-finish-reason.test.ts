@@ -2,31 +2,52 @@ import { describe, expect, it } from "vitest";
 import { mapApertisFinishReason } from "./map-finish-reason";
 
 describe("mapApertisFinishReason", () => {
-  it('maps "stop" to "stop"', () => {
-    expect(mapApertisFinishReason("stop")).toBe("stop");
+  it('maps "stop" to { unified: "stop", raw: "stop" }', () => {
+    expect(mapApertisFinishReason("stop")).toEqual({
+      unified: "stop",
+      raw: "stop",
+    });
   });
 
-  it('maps "length" to "length"', () => {
-    expect(mapApertisFinishReason("length")).toBe("length");
+  it('maps "length" to { unified: "length", raw: "length" }', () => {
+    expect(mapApertisFinishReason("length")).toEqual({
+      unified: "length",
+      raw: "length",
+    });
   });
 
-  it('maps "tool_calls" to "tool-calls"', () => {
-    expect(mapApertisFinishReason("tool_calls")).toBe("tool-calls");
+  it('maps "tool_calls" to { unified: "tool-calls", raw: "tool_calls" }', () => {
+    expect(mapApertisFinishReason("tool_calls")).toEqual({
+      unified: "tool-calls",
+      raw: "tool_calls",
+    });
   });
 
-  it('maps "content_filter" to "content-filter"', () => {
-    expect(mapApertisFinishReason("content_filter")).toBe("content-filter");
+  it('maps "content_filter" to { unified: "content-filter", raw: "content_filter" }', () => {
+    expect(mapApertisFinishReason("content_filter")).toEqual({
+      unified: "content-filter",
+      raw: "content_filter",
+    });
   });
 
-  it('maps null to "unknown"', () => {
-    expect(mapApertisFinishReason(null)).toBe("unknown");
+  it('maps null to { unified: "other", raw: undefined }', () => {
+    expect(mapApertisFinishReason(null)).toEqual({
+      unified: "other",
+      raw: undefined,
+    });
   });
 
-  it('maps undefined to "unknown"', () => {
-    expect(mapApertisFinishReason(undefined)).toBe("unknown");
+  it('maps undefined to { unified: "other", raw: undefined }', () => {
+    expect(mapApertisFinishReason(undefined)).toEqual({
+      unified: "other",
+      raw: undefined,
+    });
   });
 
-  it('maps unknown string to "unknown"', () => {
-    expect(mapApertisFinishReason("something_else")).toBe("unknown");
+  it('maps unknown string to { unified: "other", raw: "something_else" }', () => {
+    expect(mapApertisFinishReason("something_else")).toEqual({
+      unified: "other",
+      raw: "something_else",
+    });
   });
 });

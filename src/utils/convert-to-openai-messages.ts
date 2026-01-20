@@ -1,4 +1,4 @@
-import type { LanguageModelV1Prompt } from "@ai-sdk/provider";
+import type { LanguageModelV3Prompt } from "@ai-sdk/provider";
 
 export type OpenAIMessage =
   | { role: "system"; content: string }
@@ -20,13 +20,14 @@ export type OpenAIToolCall = {
 };
 
 export function convertToOpenAIMessages(
-  prompt: LanguageModelV1Prompt,
+  prompt: LanguageModelV3Prompt,
 ): OpenAIMessage[] {
   const messages: OpenAIMessage[] = [];
 
   for (const message of prompt) {
     switch (message.role) {
       case "system":
+        // V3 system messages have content as string directly
         messages.push({ role: "system", content: message.content });
         break;
 
@@ -37,16 +38,36 @@ export function convertToOpenAIMessages(
             switch (part.type) {
               case "text":
                 return { type: "text", text: part.text };
-              case "image":
-                return {
-                  type: "image_url",
-                  image_url: {
-                    url:
-                      part.image instanceof URL
-                        ? part.image.toString()
-                        : `data:${part.mimeType ?? "image/png"};base64,${Buffer.from(part.image).toString("base64")}`,
-                  },
-                };
+              case "file": {
+                // V3 uses 'file' type with mediaType for images
+                if (part.mediaType?.startsWith("image/")) {
+                  let url: string;
+                  if (part.data instanceof URL) {
+                    url = part.data.toString();
+                  } else if (typeof part.data === "string") {
+                    // Assume it's a URL string or base64
+                    if (
+                      part.data.startsWith("http://") ||
+                      part.data.startsWith("https://")
+                    ) {
+                      url = part.data;
+                    } else {
+                      // Base64 encoded string
+                      url = `data:${part.mediaType};base64,${part.data}`;
+                    }
+                  } else {
+                    // Uint8Array
+                    url = `data:${part.mediaType};base64,${Buffer.from(part.data).toString("base64")}`;
+                  }
+                  return {
+                    type: "image_url",
+                    image_url: { url },
+                  };
+                }
+                throw new Error(
+                  `Unsupported file type: ${part.mediaType}. Only image/* is supported.`,
+                );
+              }
               default:
                 throw new Error(
                   `Unsupported user content part type: ${(part as { type: string }).type}`,
@@ -58,25 +79,20 @@ export function convertToOpenAIMessages(
 
       case "assistant": {
         const textContent = message.content
-          .filter((p): p is { type: "text"; text: string } => p.type === "text")
+          .filter((p) => p.type === "text")
           .map((p) => p.text)
           .join("");
 
         const toolCalls = message.content
-          .filter(
-            (
-              p,
-            ): p is {
-              type: "tool-call";
-              toolCallId: string;
-              toolName: string;
-              args: unknown;
-            } => p.type === "tool-call",
-          )
+          .filter((p) => p.type === "tool-call")
           .map((tc) => {
+            // V3 uses 'input' instead of 'args'
             let arguments_str = "{}";
             try {
-              arguments_str = JSON.stringify(tc.args);
+              arguments_str =
+                typeof tc.input === "string"
+                  ? tc.input
+                  : JSON.stringify(tc.input);
             } catch {
               arguments_str = "{}";
             }
@@ -97,16 +113,28 @@ export function convertToOpenAIMessages(
 
       case "tool":
         for (const result of message.content) {
+          if (result.type !== "tool-result") continue;
+
+          // V3 uses 'output' instead of 'result'
           let content = "{}";
-          if (typeof result.result === "string") {
-            content = result.result;
+          const output = result.output;
+
+          if (typeof output === "string") {
+            content = output;
+          } else if (Array.isArray(output)) {
+            // Output can be an array of content parts
+            const textParts = output
+              .filter((p) => p.type === "text")
+              .map((p) => p.text);
+            content = textParts.join("");
           } else {
             try {
-              content = JSON.stringify(result.result);
+              content = JSON.stringify(output);
             } catch {
               content = "{}";
             }
           }
+
           messages.push({
             role: "tool",
             tool_call_id: result.toolCallId,

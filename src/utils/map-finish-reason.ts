@@ -1,18 +1,20 @@
-import type { LanguageModelV1FinishReason } from "@ai-sdk/provider";
+import type { LanguageModelV3FinishReason } from "@ai-sdk/provider";
 
 export function mapApertisFinishReason(
   finishReason: string | null | undefined,
-): LanguageModelV1FinishReason {
+): LanguageModelV3FinishReason {
+  const raw = finishReason ?? undefined;
+
   switch (finishReason) {
     case "stop":
-      return "stop";
+      return { unified: "stop", raw };
     case "length":
-      return "length";
+      return { unified: "length", raw };
     case "tool_calls":
-      return "tool-calls";
+      return { unified: "tool-calls", raw };
     case "content_filter":
-      return "content-filter";
+      return { unified: "content-filter", raw };
     default:
-      return "unknown";
+      return { unified: "other", raw };
   }
 }

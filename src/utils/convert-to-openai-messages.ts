@@ -57,11 +57,19 @@ export function convertToOpenAIMessages(prompt: LanguageModelV1Prompt): OpenAIMe
 
         const toolCalls = message.content
           .filter((p): p is { type: 'tool-call'; toolCallId: string; toolName: string; args: unknown } => p.type === 'tool-call')
-          .map((tc) => ({
-            id: tc.toolCallId,
-            type: 'function' as const,
-            function: { name: tc.toolName, arguments: JSON.stringify(tc.args) },
-          }));
+          .map((tc) => {
+            let arguments_str = '{}';
+            try {
+              arguments_str = JSON.stringify(tc.args);
+            } catch {
+              arguments_str = '{}';
+            }
+            return {
+              id: tc.toolCallId,
+              type: 'function' as const,
+              function: { name: tc.toolName, arguments: arguments_str },
+            };
+          });
 
         messages.push({
           role: 'assistant',
@@ -73,10 +81,20 @@ export function convertToOpenAIMessages(prompt: LanguageModelV1Prompt): OpenAIMe
 
       case 'tool':
         for (const result of message.content) {
+          let content = '{}';
+          if (typeof result.result === 'string') {
+            content = result.result;
+          } else {
+            try {
+              content = JSON.stringify(result.result);
+            } catch {
+              content = '{}';
+            }
+          }
           messages.push({
             role: 'tool',
             tool_call_id: result.toolCallId,
-            content: typeof result.result === 'string' ? result.result : JSON.stringify(result.result),
+            content,
           });
         }
         break;

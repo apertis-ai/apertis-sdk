@@ -6,5 +6,5 @@ export default defineConfig({
   dts: true,
   clean: true,
   sourcemap: true,
-  noExternal: ["@ai-sdk/provider", "@ai-sdk/provider-utils"],
+  noExternal: ["@ai-sdk/openai-compatible"],
 });

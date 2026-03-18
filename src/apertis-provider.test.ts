@@ -85,7 +85,10 @@ describe("createApertis (V2 default)", () => {
   it("implements ProviderV2 interface", () => {
     const provider = createApertis({ apiKey: "test-key" });
 
-    expect((provider as any).specificationVersion).toBe("v2");
+    expect(
+      (provider as unknown as { specificationVersion: string })
+        .specificationVersion,
+    ).toBe("v2");
   });
 });
 

@@ -15,6 +15,7 @@ import {
   generateId,
   postJsonToApi,
 } from "@ai-sdk/provider-utils";
+import type { ApertisChatConfig } from "./apertis-chat-language-model";
 import type { ApertisChatSettings } from "./apertis-chat-settings";
 import { apertisFailedResponseHandler } from "./apertis-error";
 import {
@@ -22,7 +23,6 @@ import {
   openAIChatChunkSchema,
   openAIChatResponseSchema,
 } from "./schemas/chat-response";
-import type { ApertisChatConfig } from "./apertis-chat-language-model";
 import {
   convertToOpenAIMessages,
   convertToOpenAIToolChoice,

@@ -3,11 +3,11 @@ import {
   createJsonResponseHandler,
   postJsonToApi,
 } from "@ai-sdk/provider-utils";
+import type { ApertisEmbeddingConfig } from "./apertis-embedding-model";
 import type {
   ApertisEmbeddingModelId,
   ApertisEmbeddingSettings,
 } from "./apertis-embedding-settings";
-import type { ApertisEmbeddingConfig } from "./apertis-embedding-model";
 import { apertisFailedResponseHandler } from "./apertis-error";
 import { openAIEmbeddingResponseSchema } from "./schemas/embedding-response";
 

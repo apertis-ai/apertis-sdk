@@ -4,8 +4,9 @@ Apertis AI provider for the [Vercel AI SDK](https://sdk.vercel.ai/).
 
 ## Compatibility
 
-- **Requires AI SDK 6.0+** - This package implements the `LanguageModelV3` specification
+- **AI SDK 5.0+** - Compatible with both AI SDK v5 and v6
 - **Node.js 18+** - Minimum supported Node.js version
+- **OpenCode, Kilo Code, Cursor** - Works with all AI coding tools built on the Vercel AI SDK
 
 ## Installation
 
@@ -49,8 +50,8 @@ const { text } = await generateText({
 import { apertis } from '@apertis/ai-sdk-provider';
 import { streamText } from 'ai';
 
-const { textStream } = await streamText({
-  model: apertis('claude-sonnet-4.5'),
+const { textStream } = streamText({
+  model: apertis('claude-sonnet-4-6'),
   prompt: 'Write a haiku about programming.',
 });
 
@@ -81,8 +82,6 @@ const { text } = await generateText({
 
 ### Embeddings
 
-Generate vector embeddings for semantic search and similarity:
-
 ```typescript
 import { apertis } from '@apertis/ai-sdk-provider';
 import { embed, embedMany } from 'ai';
@@ -95,26 +94,23 @@ const { embedding } = await embed({
 
 // Multiple embeddings
 const { embeddings } = await embedMany({
-  model: apertis.textEmbeddingModel('text-embedding-3-large', {
-    dimensions: 1024, // Optional: reduce dimensions
-  }),
+  model: apertis.textEmbeddingModel('text-embedding-3-large'),
   values: ['Hello', 'World'],
 });
 ```
 
 ## Supported Models
 
-Any model available on Apertis AI, including:
+Any model available on [Apertis AI](https://apertis.ai), including:
 
 ### Chat Models
-- **OpenAI**: `gpt-5.2`, `gpt-5.2-chat`, `gpt-5.2-pro`
-- **Anthropic**: `claude-opus-4-5-20251101`, `claude-opus-4-5-20251101-thinking`, `claude-sonnet-4.5`, `claude-haiku-4.5`
-- **Google**: `gemini-3-pro-preview`, `gemini-3-flash-preview`, `gemini-2.5-pro`
-- **Other**: `glm-4.7`, `minimax-m2.1`, and 470+ more models
+- **OpenAI**: `gpt-5.2`, `gpt-5.1`, `gpt-5.1-codex-mini`
+- **Anthropic**: `claude-opus-4-6`, `claude-sonnet-4-6`, `claude-haiku-4.5`
+- **Google**: `gemini-3-pro-preview`, `gemini-3-flash-preview`, `gemini-2.5-flash-preview`
+- **Other**: `glm-4.7`, `minimax-m2.1`, and 500+ more models
 
 ### Embedding Models
 - `text-embedding-3-small`, `text-embedding-3-large`
-- `text-embedding-ada-002`
 
 ## Provider Configuration
 
@@ -122,25 +118,51 @@ Any model available on Apertis AI, including:
 import { createApertis } from '@apertis/ai-sdk-provider';
 
 const apertis = createApertis({
-  apiKey: 'sk-your-api-key',     // Optional if APERTIS_API_KEY is set
-  baseURL: 'https://api.apertis.ai/v1',  // Custom API endpoint
-  headers: { 'X-Custom': 'value' },      // Custom headers
+  apiKey: 'sk-your-api-key',                  // Optional if APERTIS_API_KEY is set
+  baseURL: 'https://api.apertis.ai/v1',       // Custom API endpoint
+  headers: { 'X-Custom': 'value' },           // Custom headers
 });
 ```
 
-## What's New (v1.1.1)
+### Use with OpenCode
 
-- **ProviderV3 Interface** - Full implementation of `ProviderV3` specification
-- **Embedding Models** - Support for embeddings via `apertis.textEmbeddingModel()`
-- **Schema Fixes** - More flexible response parsing for Apertis API compatibility
+Add to your `opencode.json`:
 
-## Breaking Changes (v1.0.0)
+```json
+{
+  "provider": {
+    "apertis": {
+      "npm": "@apertis/ai-sdk-provider",
+      "options": {
+        "apiKey": "sk-your-api-key"
+      },
+      "models": {
+        "claude-opus-4-6": { "name": "Claude Opus 4.6" },
+        "claude-sonnet-4-6": { "name": "Claude Sonnet 4.6" }
+      }
+    }
+  }
+}
+```
 
-- **Requires AI SDK 6+** - No longer compatible with AI SDK 5.x
-- **V3 Specification** - Implements `LanguageModelV3` interface
-- **Content format** - Output uses `content` array instead of separate `text`/`toolCalls`
-- **Usage format** - Token tracking uses new `inputTokens`/`outputTokens` structure
-- **Supported URLs** - New `supportedUrls` property for image URL support
+## Changelog
+
+### v2.1.0
+
+- Rewrite as thin wrapper over `@ai-sdk/openai-compatible` for guaranteed compatibility
+- Works with AI SDK v5+ (OpenCode, Kilo Code, and all compatible tools)
+- Simplified codebase (removed custom V2/V3 implementations)
+
+### v2.0.x
+
+- Default provider switched from V3 to V2 spec for broader compatibility
+- Added V2 chat and embedding model implementations
+- Fixed Zod parsing errors (`expected string, received object`) with OpenCode
+
+### v1.x
+
+- Custom `LanguageModelV3` implementation (requires AI SDK 6+)
+- Custom streaming, tool calling, and embedding support
 
 ## License
 

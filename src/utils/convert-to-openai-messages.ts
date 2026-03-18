@@ -1,4 +1,7 @@
-import type { LanguageModelV3Prompt } from "@ai-sdk/provider";
+import type {
+  LanguageModelV2Prompt,
+  LanguageModelV3Prompt,
+} from "@ai-sdk/provider";
 
 export type OpenAIMessage =
   | { role: "system"; content: string }
@@ -20,7 +23,7 @@ export type OpenAIToolCall = {
 };
 
 export function convertToOpenAIMessages(
-  prompt: LanguageModelV3Prompt,
+  prompt: LanguageModelV2Prompt | LanguageModelV3Prompt,
 ): OpenAIMessage[] {
   const messages: OpenAIMessage[] = [];
 

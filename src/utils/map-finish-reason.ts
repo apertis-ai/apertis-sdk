@@ -1,20 +1,43 @@
-import type { LanguageModelV3FinishReason } from "@ai-sdk/provider";
+import type {
+  LanguageModelV2FinishReason,
+  LanguageModelV3FinishReason,
+} from "@ai-sdk/provider";
+
+type NormalizedFinishReason =
+  | "stop"
+  | "length"
+  | "tool-calls"
+  | "content-filter"
+  | "other";
+
+function normalizeFinishReason(
+  finishReason: string | null | undefined,
+): NormalizedFinishReason {
+  switch (finishReason) {
+    case "stop":
+      return "stop";
+    case "length":
+      return "length";
+    case "tool_calls":
+      return "tool-calls";
+    case "content_filter":
+      return "content-filter";
+    default:
+      return "other";
+  }
+}
 
 export function mapApertisFinishReason(
   finishReason: string | null | undefined,
 ): LanguageModelV3FinishReason {
-  const raw = finishReason ?? undefined;
+  return {
+    unified: normalizeFinishReason(finishReason),
+    raw: finishReason ?? undefined,
+  };
+}
 
-  switch (finishReason) {
-    case "stop":
-      return { unified: "stop", raw };
-    case "length":
-      return { unified: "length", raw };
-    case "tool_calls":
-      return { unified: "tool-calls", raw };
-    case "content_filter":
-      return { unified: "content-filter", raw };
-    default:
-      return { unified: "other", raw };
-  }
+export function mapApertisFinishReasonV2(
+  finishReason: string | null | undefined,
+): LanguageModelV2FinishReason {
+  return normalizeFinishReason(finishReason);
 }

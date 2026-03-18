@@ -1,4 +1,6 @@
 import type {
+  LanguageModelV2FunctionTool,
+  LanguageModelV2ToolChoice,
   LanguageModelV3FunctionTool,
   LanguageModelV3ToolChoice,
 } from "@ai-sdk/provider";
@@ -19,7 +21,10 @@ export type OpenAIToolChoice =
   | { type: "function"; function: { name: string } };
 
 export function convertToOpenAITools(
-  tools: LanguageModelV3FunctionTool[] | undefined,
+  tools:
+    | LanguageModelV2FunctionTool[]
+    | LanguageModelV3FunctionTool[]
+    | undefined,
 ): OpenAITool[] | undefined {
   if (!tools || tools.length === 0) return undefined;
 
@@ -34,7 +39,7 @@ export function convertToOpenAITools(
 }
 
 export function convertToOpenAIToolChoice(
-  toolChoice: LanguageModelV3ToolChoice | undefined,
+  toolChoice: LanguageModelV2ToolChoice | LanguageModelV3ToolChoice | undefined,
 ): OpenAIToolChoice | undefined {
   if (!toolChoice) return undefined;
 

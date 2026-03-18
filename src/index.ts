@@ -1,7 +1,9 @@
 export {
   createApertis,
+  createApertisV3,
   apertis,
   type ApertisProvider,
+  type ApertisProviderV3,
 } from "./apertis-provider";
 
 // Chat model exports

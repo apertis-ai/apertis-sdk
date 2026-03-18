@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { mapApertisFinishReason } from "./map-finish-reason";
+import {
+  mapApertisFinishReason,
+  mapApertisFinishReasonV2,
+} from "./map-finish-reason";
 
 describe("mapApertisFinishReason", () => {
   it('maps "stop" to { unified: "stop", raw: "stop" }', () => {
@@ -49,5 +52,35 @@ describe("mapApertisFinishReason", () => {
       unified: "other",
       raw: "something_else",
     });
+  });
+});
+
+describe("mapApertisFinishReasonV2", () => {
+  it('maps "stop" to string "stop"', () => {
+    expect(mapApertisFinishReasonV2("stop")).toBe("stop");
+  });
+
+  it('maps "length" to string "length"', () => {
+    expect(mapApertisFinishReasonV2("length")).toBe("length");
+  });
+
+  it('maps "tool_calls" to string "tool-calls"', () => {
+    expect(mapApertisFinishReasonV2("tool_calls")).toBe("tool-calls");
+  });
+
+  it('maps "content_filter" to string "content-filter"', () => {
+    expect(mapApertisFinishReasonV2("content_filter")).toBe("content-filter");
+  });
+
+  it('maps null to string "other"', () => {
+    expect(mapApertisFinishReasonV2(null)).toBe("other");
+  });
+
+  it('maps undefined to string "other"', () => {
+    expect(mapApertisFinishReasonV2(undefined)).toBe("other");
+  });
+
+  it('maps unknown string to "other"', () => {
+    expect(mapApertisFinishReasonV2("something_else")).toBe("other");
   });
 });

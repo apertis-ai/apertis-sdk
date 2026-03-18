@@ -184,6 +184,7 @@ export class ApertisChatLanguageModelV2 implements LanguageModelV2 {
               type: "text-end",
               id: textId,
             });
+            textId = null;
           }
 
           for (const [, buffer] of toolCallBuffers) {

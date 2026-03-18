@@ -202,6 +202,7 @@ export class ApertisChatLanguageModel implements LanguageModelV3 {
               type: "text-end",
               id: textId,
             });
+            textId = null;
           }
 
           // Emit completed tool calls (only those with valid names)

@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/apertis-ai/apertis-sdk"
   },
-  "homepage": "https://github.com/apertis-ai/apertis-sdk#readme",
+  "homepage": "https://apertis.ai?utm_source=apertis-sdk&utm_medium=npm&utm_campaign=ecosystem",
   "type": "module",
   "engines": {
     "node": ">=18.0.0"

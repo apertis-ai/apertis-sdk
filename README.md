@@ -101,7 +101,7 @@ const { embeddings } = await embedMany({
 
 ## Supported Models
 
-Any model available on [Apertis AI](https://apertis.ai), including:
+Any model available on [Apertis AI](https://apertis.ai?utm_source=apertis-sdk&utm_medium=readme&utm_campaign=ecosystem), including:
 
 ### Chat Models
 - **OpenAI**: `gpt-5.2`, `gpt-5.1`, `gpt-5.1-codex-mini`

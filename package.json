@@ -3,6 +3,7 @@
   "version": "3.0.0",
   "description": "Apertis AI provider for Vercel AI SDK",
   "license": "Apache-2.0",
+  "packageManager": "pnpm@10.14.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/apertis-ai/apertis-sdk"

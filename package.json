@@ -1,6 +1,6 @@
 {
   "name": "@apertis/ai-sdk-provider",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Apertis AI provider for Vercel AI SDK",
   "license": "Apache-2.0",
   "repository": {
@@ -12,14 +12,19 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     }
   },
   "files": ["dist"],

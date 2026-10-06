@@ -3,6 +3,8 @@ name: Publish to npm
 on:
   release:
     types: [published]
+  # Re-publishes the version on the dispatched ref, e.g. after a failed release run.
+  workflow_dispatch:
 
 jobs:
   publish:
@@ -42,7 +44,8 @@ jobs:
         run: pnpm build
 
       - name: Upgrade npm for OIDC trusted publishing
-        run: npm install -g npm@latest
+        # npm 11.5.1+ is needed for OIDC; npm 12 no longer runs on Node 20.
+        run: npm install -g npm@^11.5.1
 
       - name: Publish to npm (OIDC trusted publisher)
         run: npm publish --access public
